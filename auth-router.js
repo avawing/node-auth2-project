@@ -3,8 +3,7 @@ const jwt = require("jsonwebtoken");
 
 const router = require("express").Router();
 
-const Users = require("../users/users-model.js");
-const { isValid } = require("../users/users-service.js");
+const Users = require("./dbhelper");
 
 router.post("/register", (req, res) => {
     const credentials = req.body;
@@ -74,5 +73,9 @@ function makeJwt({ id, username, department }) {
 
     return jwt.sign(payload, config.jwtSecret, options);
 }
+
+function isValid(user) {
+    return Boolean(user.username && user.password && typeof user.password === "string");
+  }
 
 module.exports = router;
