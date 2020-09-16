@@ -1,25 +1,19 @@
 const express = require('express')
 const helmet = require('helmet')
 const morgan = require('morgan')
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
+const authRouter = require('./auth-router')
+const usersRouter = require('./users-router')
 
 const server = express()
 
-server.use(express.json())
+server.use(helmet(), morgan(), express.json(), cors())
 
-function generateToken({username, role}){
-    const payload = {
-        username, role
-    }
-    const config = {
-        jwtSecret: process.env.JWT_SECRET || 'I like Socks'
-    }
-    const options = {
-        expiresIn = '1d'
-    }
-    return jwt.sign(payload, config.jwtSecret, options)
-}
+server.use("/api/auth", authRouter);
+server.use("/api/users", usersRouter);
+
+server.get("/", (req, res) => {
+    res.send("WHAZZA");
+});
 
 const port = process.env.PORT || 5000;
 
