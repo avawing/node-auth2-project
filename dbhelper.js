@@ -12,22 +12,20 @@ function find() {
 }
 
 function findBy(filter) {
-    // return db("users").where(filter).orderBy("id");
-    return db("users as u")
-        .where(filter)
-        .orderBy("u.id")
-        .join("departments as d", "d.id", "u.role")
-        .select("u.id", "u.username", "u.password", "d.name as department");
+return db("users").where(filter).orderBy("id");
+    // return db("users as u")
+    //     .where(filter)
+    //     .orderBy("u.id")
+    //     .join("departments as d", "d.id", "u.role")
+    //     .select("u.id", "u.username", "u.password", "d.name as department");
 }
 
-async function add(user) {
-    try {
-        const [id] = await db("users").insert(user, "id");
-
-        return findById(id);
-    } catch (error) {
-        throw error;
-    }
+function add(user) {
+db("users").insert(user)
+.then(id => {
+    return findById(id[0])
+})
+.catch(err => {return err})
 }
 
 function findById(id) {
